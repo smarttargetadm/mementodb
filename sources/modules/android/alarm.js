@@ -1,29 +1,116 @@
-class Alarm {
-    
-    #hour;
-    #minutes;
-    #message;
+const { omitBy } = require("lodash");
 
-    constructor(hour, minutes, message) {
-        this.#hour = hour;
+class Alarm {
+
+    #hours = new Date().getHours();
+    #minutes = new Date().getMinutes();
+    #message = "";
+
+    constructor(hours, minutes, message) {
+        this.#hours = hours;
         this.#minutes = minutes;
         this.#message = message;
     }
 
-    getHour() {
-        return this.#hour;
+    get hours() {
+        return this.#hours;
     }
 
-    setHour(value) {
-        this.#hour = value;
+    set hours(value) {
+        this.#hours = value;
     }
 
-    getMinutes() {
-        
+    get minutes() {
+        return this.#minutes;
     }
 
+    set minutes(value) {
+        this.#minutes = value;
+    }
+
+    get message() {
+        return this.#message
+    }
+
+    set message(value) {
+        this.#message = value;
+    }
+
+};
+
+class Constant {
+
+    #value;
+
+    constructor(value) {
+        this.#value = value;
+        return Object.freeze(this);
+    }
+
+    get value() {
+        return this.#value;
+    }
+
+    valueOf() {
+        return this.#value;
+    }
+
+}
+
+class Enum {
+
+    static create(type, ...values) {
+
+    }
+
+}
+
+class EnumString extends EnumValue {
+
+}
+
+class EnumNumber {
+
+
+}
+
+Alarm.Datum = Object.freeze({
+    HOUR: Symbol("android.intent.extra.alarm.HOUR"),
+    MINUTES: Symbol("android.intent.extra.alarm.MINUTES"),
+    MESSAGE: Symbol("android.intent.extra.alarm.MESSAGE"),
+    VIBRATE: Symbol("android.intent.extra.alarm.VIBRATE"),
+    SKIPUI: Symbol("android.intent.extra.alarm.SKIP_UI"),
+    WEEKDAYS: Symbol("android.intent.extra.alarm.DAYS"),
+
+});
+
+class WeekDay {
+
+    #value;
     
+    constructor(value) {
+        this.#value = Object.freeze(value);
+    }
 
+    static get [Symbol.species]() {
+        return Number;
+    }
+
+    static [Symbol.hasInstance](value) {
+        return Number.isInteger(value);
+    }
+
+    valueOf() {
+        return this.#value;
+    }
+
+    static Sunday = WeekDay(1);
+    static Monday = WeekDay(2);
+    static Tuesday = WeekDay(3);
+    static Wednesday = WeekDay(4);
+    static Thursday = WeekDay(5);
+    static Friday = WeekDay(6);
+    static Saturday = WeekDay(7);
 
 };
 
@@ -50,7 +137,8 @@ var AndroidAlarm = {
     create: function(hour, minutes, message, options) {
         i = intent("android.intent.action.SET_ALARM");
         i.extraInt("android.intent.extra.alarm.HOUR", hour);
-        i.extraInt("android.intent.extra.alarm.MINUTES", minutes);
+                i.extraInt("android.intent.extra.alarm.MINUTES", minutes);
+
         if (message !== undefined)
             i.extra("android.intent.extra.alarm.MESSAGE", message);
         if (options !== undefined) {
