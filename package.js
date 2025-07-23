@@ -1,7 +1,6 @@
 var profile = {
     resourceTags: {
-        ignore: function(filename, mid){
-            // only include moment/moment
+        ignore: function (filename, mid) {
             return mid != "moment/moment";
         },
         amd: function(filename, mid){
