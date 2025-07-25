@@ -1,4 +1,46 @@
-const { omitBy } = require("lodash");
+class Constant {
+    
+    #value;
+
+    constructor(value) {
+        this.#value = value;
+        return Object.freeze(this);
+    }
+
+    get value() {
+        return this.#value;
+    }
+
+    valueOf() {
+        return this.#value;
+    }
+
+    #create(value) {
+
+        var extended = class Value extends Constant {
+
+            static #base = Object.getPrototype(value);
+            
+            constructor() {
+                super(value)
+            }
+
+            static get [Symbol.species]() {
+                return this.#base;
+            }
+            
+            static [Symbol.hasInstance](value) {
+                return typeof.isInteger(value);
+    }
+            
+        }
+        var constant = class 
+
+    
+
+};
+
+
 
 class Alarm {
 
@@ -57,22 +99,13 @@ class Constant {
 
 }
 
-class Enum {
-
-    static create(type, ...values) {
-
+static get [Symbol.species]() {
+        return Number;
     }
 
-}
-
-class EnumString extends EnumValue {
-
-}
-
-class EnumNumber {
-
-
-}
+    static [Symbol.hasInstance](value) {
+        return Number.isInteger(value);
+    }
 
 Alarm.Datum = Object.freeze({
     HOUR: Symbol("android.intent.extra.alarm.HOUR"),
@@ -92,13 +125,7 @@ class WeekDay {
         this.#value = Object.freeze(value);
     }
 
-    static get [Symbol.species]() {
-        return Number;
-    }
-
-    static [Symbol.hasInstance](value) {
-        return Number.isInteger(value);
-    }
+    
 
     valueOf() {
         return this.#value;
